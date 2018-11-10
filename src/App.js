@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import logo from './logo.svg';
 import './App.css';
-// import { Select, Trigger, OptionList, Option, utils } from 'Selectly'
-// const { getToggledValues } = utils
+
+import Select from 'react-select';
+
+const options = [
+  { value: 'financial-times', label: 'Financial Times' },
+  { value: 'bloomberg', label: 'Bloomberg' },
+];
+
 
 class App extends Component {
   constructor () {
@@ -13,12 +19,12 @@ class App extends Component {
       filteredNews: [],
       filterview: false,
       search: '',
-      // defaultSelectedSource: 'Select the ones you trust',
-      // selectedSources: []
+      // selectedSources: [],
+      selectedOption: null  //select menu
     }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    // this.handleSelect = this.handleSelect.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
+    this.handleSelectChange = this.handleSelectChange.bind(this)
   }
 
   async componentDidMount(){
@@ -33,44 +39,66 @@ class App extends Component {
     }
   }
 
-  handleChange (evt) {
+  handleSearchChange (evt) {
     this.setState({search: evt.target.value})
   }
+  //select menu
+  async handleSelectChange (selectedOption) {
+    await this.setState({ selectedOption });
+    console.log(`selectedOption:`, this.state.selectedOption);
+    // console.log(`8888888:`, this.state.selectedOption);
+  }
 
-  async handleSubmit (evt) {
+  async handleSearchSubmit (evt) {
     evt.preventDefault();
+    // console.log('selectedOption', this.state.selectedOption);
+    // this.state.selectedOption.length && this.state.selectedOption.forEach(option => {
+    //   this.setState({selectedSources: this.state.selectedSources.push(option.value)})
+    // })
+    let options = [];
+    this.state.selectedOption.map(option => options.push(option.value));
+    // console.log('selectedSources', this.state.selectedSources);
+    let sources = options.join(', ');
+    console.log('selected sources', sources)
     try {
-      let response = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}`);
+      let response = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}`);
       let filteredNews = response.data.articles;
       this.setState({
         filteredNews,
         filterView: true,
-        search: ''
+        search: '',
+        selectedOption: []
       })
     } catch (err) {
       console.log(err)
     }
   }
 
-  // handleSelect(value) {
-  //   this.setState({
-  //     selectedSources: getToggledValues(this.state.selectedSources, value)
-  //   })
-  // }
-
   render() {
-    let { allNews, filteredNews, filterView, } = this.state;
-    // defaultSelectedSource, selectedSources
+    let { allNews, filteredNews, filterView, selectedOption } = this.state;
+ 
+    
     return (
       <div className="App">
         <header className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <h1>BuzWorld</h1>
-          <form onSubmit={this.handleSubmit}>
-            <input type="text" name="search" placeholder="Search for topics" value={this.state.search} onChange={this.handleChange} />
-            <button type='submit'>Go</button>
-          </form>       
         </header>
+        <form onSubmit={this.handleSearchSubmit}>
+          <label>Search: </label>
+          <input type="text" name="search" placeholder="Search for topics" value={this.state.search} onChange={this.handleSearchChange} />
+          <button type='submit'>Go</button>
+          <br />
+
+          <Select
+            value={selectedOption}
+            onChange={this.handleSelectChange}
+            options={options}
+            isMulti={true}
+          />
+          <br />
+
+        </form>       
 
 
 
@@ -101,22 +129,7 @@ class App extends Component {
           }
           </div>}
 
-        {/* <Select
-        multiple
-        onChange={value => this.handleSelect(value)}
-      >
-        <Trigger>
-          { selectedSources.length > 0
-            ? selectedSources.join(', ')
-            : defaultSelectedSource
-          }
-        </Trigger>
-        <OptionList tag="ul" className="select-menu">
-          <Option value="blp">Bloomberg</Option>
-          <Option value="wsj">The Wall Street Journal</Option>
-          <Option value="ft">Finantial Times</Option>
-        </OptionList>
-      </Select> */}
+        
     </div>
     );
   }
