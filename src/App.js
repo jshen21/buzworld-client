@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// import logo from './logo.svg';
 import './App.css';
 import Select from 'react-select';
 import { Line } from 'react-chartjs-2';
-// import LineChart from './components/Chart'
+
 
 const options = [
   { value: 'bloomberg', label: 'Bloomberg' },
@@ -51,10 +50,7 @@ class App extends Component {
       filteredNews: [],
       filterview: false,
       search: '',
-      // selectedSources: [],
-      selectedOption: null,  //select menu
-      labels: [],
-      datasets:[]
+      selectedOption: null,
     }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
@@ -115,8 +111,6 @@ class App extends Component {
     let now2 = new Date();
     now2.setDate(now2.getDate() - 14)
     let t2 = now2.toISOString().slice(0, 10)
-    console.log("HHHHHHH", t2)
-    console.log("HHHHHHH", t1)
     
     let now3 = new Date();
     now3.setDate(now3.getDate() - 21)
@@ -127,36 +121,27 @@ class App extends Component {
     let t4 = now4.toISOString().slice(0, 10)
 
     try {
+      let response = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}`);
+      let filteredNews = response.data.articles;
+
       let response0 = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}&from=${t1}&to=${t0}`);
-      let filteredNews = response0.data.articles;
       let totalResults0 = response0.data.totalResults;
-      console.log("HIIII", totalResults0)
 
       let response1 = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}&from=${t2}&to=${t1}`);
-      // let filteredNews = response1.data.articles;
       let totalResults1 = response1.data.totalResults;
-      console.log("HIIII", totalResults1)
 
       let response2 = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}&from=${t3}&to=${t2}`);
-      // let filteredNews = response1.data.articles;
       let totalResults2 = response2.data.totalResults;
-      console.log("HIIII", totalResults2)
 
       let response3 = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}&from=${t4}&to=${t3}`);
-      // let filteredNews = response1.data.articles;
       let totalResults3 = response3.data.totalResults;
-      console.log("HIIII", totalResults3)
 
-
-      // data.labeles = [t4, t3, t2, t1, t0];
-      // data.datasets[0].data = [totalResults3, totalResults2, totalResults1, totalResults0]
+      data.labels = [t3, t2, t1, t0];
+      data.datasets[0].data = [totalResults3, totalResults2, totalResults1, totalResults0]
 
       this.setState({
         filteredNews,
-        filterView: true,
-        // search: '',
-        labels: [t4, t3, t2, t1, t0],
-        datasets: [totalResults3, totalResults2, totalResults1, totalResults0]
+        filterView: true
       })
     } catch (err) {
       console.log(err)
@@ -165,9 +150,7 @@ class App extends Component {
   }
 
   render() {
-    let { allNews, filteredNews, filterView, selectedOption, labels, datasets } = this.state;
-    data.labels = filterView && labels;
-    data.datasets[0].data = filterView && datasets;
+    let { allNews, filteredNews, filterView, selectedOption} = this.state;
 
     return (
       <div className="App">
@@ -188,10 +171,7 @@ class App extends Component {
             isMulti={true}
           />
           <br />
-
         </form>       
-
-
 
         {!filterView && <div className='listAll'>
           {
@@ -220,10 +200,8 @@ class App extends Component {
               </div>
             ))
           }
-          </div>}
-
-        
-    </div>
+        </div>}       
+      </div>
     );
   }
 }
