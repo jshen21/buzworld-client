@@ -16,7 +16,7 @@ const options = [
 ];
 
 const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: [],
   datasets: [
     {
       label: 'Media Interest Over Time',
@@ -37,7 +37,7 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40]
+      data: []
     }
   ]
 };
@@ -52,7 +52,9 @@ class App extends Component {
       filterview: false,
       search: '',
       // selectedSources: [],
-      selectedOption: null  //select menu
+      selectedOption: null,  //select menu
+      labels: [],
+      datasets:[]
     }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
@@ -146,21 +148,27 @@ class App extends Component {
       console.log("HIIII", totalResults3)
 
 
+      // data.labeles = [t4, t3, t2, t1, t0];
+      // data.datasets[0].data = [totalResults3, totalResults2, totalResults1, totalResults0]
 
       this.setState({
         filteredNews,
         filterView: true,
         // search: '',
+        labels: [t4, t3, t2, t1, t0],
+        datasets: [totalResults3, totalResults2, totalResults1, totalResults0]
       })
     } catch (err) {
       console.log(err)
     }
+
   }
 
   render() {
-    let { allNews, filteredNews, filterView, selectedOption } = this.state;
- 
-    
+    let { allNews, filteredNews, filterView, selectedOption, labels, datasets } = this.state;
+    data.labels = filterView && labels;
+    data.datasets[0].data = filterView && datasets;
+
     return (
       <div className="App">
         <header className="App-header">
