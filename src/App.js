@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import Select from 'react-select';
 import { Line } from 'react-chartjs-2';
+import Scroll from './components/Scroll'
 
 
 const options = [
@@ -153,26 +154,33 @@ class App extends Component {
     let { allNews, filteredNews, filterView, selectedOption} = this.state;
 
     return (
-      <div className="App">
-        <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <h1>BuzWorld</h1>
-        </header>
-        <form onSubmit={this.handleSearchSubmit}>
-          <label>Search: </label>
-          <input type="text" name="search" placeholder="Search for topics" value={this.state.search} onChange={this.handleSearchChange} />
-          <button type='submit'>Go</button>
-          <br />
+      <div>
+        <div>
+          <header className="App-header">
+            {/* <img src={logo} className="App-logo" alt="logo" /> */}
+            <h1>BuzWorld</h1>
+          </header>
 
-          <Select
-            value={selectedOption}
-            onChange={this.handleSelectChange}
-            options={options}
-            isMulti={true}
-          />
-          <br />
-        </form>       
+          <div className='searchBox'>
+            <form onSubmit={this.handleSearchSubmit}>
+                <div className='searchInput'>
+                  <input type="text" name="search" placeholder="Search for topics" value={this.state.search} onChange={this.handleSearchChange} />
+                  <button type='submit'>Go</button>
+                </div>
+            </form>       
+            <Select
+              className='selectBox'
+              value={selectedOption}
+              onChange={this.handleSelectChange}
+              options={options}
+              isMulti={true}
+            />
+          </div>
+        </div>
 
+        <br />
+
+        <Scroll>
         {!filterView && <div className='listAll'>
           {
             allNews.map((news,i) => (
@@ -187,20 +195,21 @@ class App extends Component {
           }
           </div>}
 
-        {filterView && <div className='listAll'>
-          <Line data={data} />
-          {
-            filteredNews.map((news,i) => (
-              <div key={i} className='listOne'>
-                <li>
-                  <p>{news.title}</p>
-                  <small>{news.source.name}</small>
-                  <small>{news.publishedAt}</small>
-                </li>
-              </div>
-            ))
-          }
-        </div>}       
+          {filterView && <div className='filterList'>
+            <Line data={data} />
+            {
+              filteredNews.map((news,i) => (
+                <div key={i} className='listOne'>
+                  <li>
+                    <p>{news.title}</p>
+                    <small>{news.source.name}</small>
+                    <small>{news.publishedAt}</small>
+                  </li>
+                </div>
+              ))
+            }
+          </div>} 
+        </Scroll>      
       </div>
     );
   }
