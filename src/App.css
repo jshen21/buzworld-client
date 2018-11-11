@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-}
 
 .App-header {
   background-color: #282c34;
@@ -19,7 +15,8 @@
 }
 
 .listAll {
-  background-color: lightgrey;
+  background-color: rgb(252, 252, 252);
+  margin-top: 5px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -29,9 +26,58 @@
   color: black;
 }
 
-.App-link {
-  color: #61dafb;
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /* justify-content: center; */
 }
+
+.selectBox {
+  width: 40%;
+  margin: auto;
+}
+
+form {
+  height: 36px;
+  margin: auto;
+  width: 40%;
+}
+
+.searchInput {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  height: 30px;
+}
+
+input {
+  border-radius: 5px;
+  width: 92%;
+}
+
+input[type="text"] {
+  font-size:15px;
+  padding-left: 2%;
+}
+
+input::placeholder {
+  font-size: 15px;
+  padding-left: 1%;
+}
+
+button {
+  border-radius: 5px;
+  background-color: rgba(75,192,192,1);
+  color: white;
+  font-weight: bold;
+  width: 8%;
+}
+
+
+/* .App-link {
+  color: #61dafb;
+} */
 
 @keyframes App-logo-spin {
   from {
