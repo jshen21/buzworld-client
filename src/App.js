@@ -6,8 +6,12 @@ import './App.css';
 import Select from 'react-select';
 
 const options = [
-  { value: 'financial-times', label: 'Financial Times' },
   { value: 'bloomberg', label: 'Bloomberg' },
+  { value: 'business-insider', label: 'Business Insider'},
+  { value: 'financial-times', label: 'Financial Times' },
+  { value: 'the-economist', label: 'The Economist' },
+  { value: 'the-new-york-times', label: 'The New York Times' },
+  { value: 'the-wall-street-journal', label: 'The Wall Street Journal' },
 ];
 
 
@@ -42,32 +46,23 @@ class App extends Component {
   handleSearchChange (evt) {
     this.setState({search: evt.target.value})
   }
-  //select menu
+
   async handleSelectChange (selectedOption) {
     await this.setState({ selectedOption });
-    console.log(`selectedOption:`, this.state.selectedOption);
-    // console.log(`8888888:`, this.state.selectedOption);
   }
 
   async handleSearchSubmit (evt) {
     evt.preventDefault();
-    // console.log('selectedOption', this.state.selectedOption);
-    // this.state.selectedOption.length && this.state.selectedOption.forEach(option => {
-    //   this.setState({selectedSources: this.state.selectedSources.push(option.value)})
-    // })
     let options = [];
-    this.state.selectedOption.map(option => options.push(option.value));
-    // console.log('selectedSources', this.state.selectedSources);
+    this.state.selectedOption && this.state.selectedOption.map(option => options.push(option.value));
     let sources = options.join(', ');
-    console.log('selected sources', sources)
     try {
       let response = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}`);
       let filteredNews = response.data.articles;
       this.setState({
         filteredNews,
         filterView: true,
-        search: '',
-        selectedOption: []
+        // search: '',
       })
     } catch (err) {
       console.log(err)
