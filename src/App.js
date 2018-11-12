@@ -4,6 +4,7 @@ import './App.css';
 import Select from 'react-select';
 import { Line } from 'react-chartjs-2';
 import Scroll from './components/Scroll'
+import NewsList from './components/NewsList'
 
 
 const options = [
@@ -78,24 +79,6 @@ class App extends Component {
     await this.setState({ selectedOption });
   }
 
-  // async handleSearchSubmit (evt) {
-  //   evt.preventDefault();
-  //   let options = [];
-  //   this.state.selectedOption && this.state.selectedOption.map(option => options.push(option.value));
-  //   let sources = options.join(', ');
-  //   try {
-  //     let response = await axios.get(`http://localhost:3000/api/search?q=${this.state.search}&sources=${sources}`);
-  //     let filteredNews = response.data.articles;
-  //     this.setState({
-  //       filteredNews,
-  //       filterView: true,
-  //       // search: '',
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
-
   async handleSearchSubmit (evt) {
     evt.preventDefault();
     let options = [];
@@ -157,14 +140,19 @@ class App extends Component {
       <div>
         <div>
           <header className="App-header">
-            {/* <img src={logo} className="App-logo" alt="logo" /> */}
             <h1>BuzWorld</h1>
           </header>
 
           <div className='searchBox'>
             <form onSubmit={this.handleSearchSubmit}>
                 <div className='searchInput'>
-                  <input type="text" name="search" placeholder="Search for topics" value={this.state.search} onChange={this.handleSearchChange} />
+                  <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search for topics" 
+                    value={this.state.search} 
+                    onChange={this.handleSearchChange} 
+                  />
                   <button type='submit'>Go</button>
                 </div>
             </form>       
@@ -181,35 +169,24 @@ class App extends Component {
         <br />
 
         <Scroll>
-        {!filterView && <div className='listAll'>
-          {
-            allNews.map((news,i) => (
-              <div key={i} className='listOne'>
-                <li>
-                  <p>{news.title}</p>
-                  <small>{news.source.name}</small>
-                  <small>{news.publishedAt}</small>
-                </li>
-              </div>
-            ))
+          {!filterView && 
+            <div className='listAll'>
+              <NewsList newsList={allNews} />
+            </div>
           }
-          </div>}
 
-          {filterView && <div className='filterList'>
-            <Line data={data} />
-            {
-              filteredNews.map((news,i) => (
-                <div key={i} className='listOne'>
-                  <li>
-                    <p>{news.title}</p>
-                    <small>{news.source.name}</small>
-                    <small>{news.publishedAt}</small>
-                  </li>
-                </div>
-              ))
-            }
-          </div>} 
+          {filterView && 
+            <div className='filterList'>
+              <Line data={data} />
+              <NewsList newsList={filteredNews} />
+            </div>
+          } 
         </Scroll>      
+
+        <footer class="pv4 ph3 ph5-m ph6-l mid-gray">
+          <small class="f6 db tc">Powered by <b class="ttu">News API</b>, All Rights Reserved.</small>
+        </footer>
+
       </div>
     );
   }

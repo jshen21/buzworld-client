@@ -8,7 +8,7 @@ const Scroll = (props) => {
           backgroundColor: 'rgb(252, 252, 252)',
           margin: 'auto',
           width: '75%',
-          height: '600px'}}>
+          height: '500px'}}>
       {props.children}
     </div>
   )
