@@ -5,11 +5,11 @@ const NewsList = ({newsList}) => {
         <div>
             {
                 newsList.map((news,i) => (
-                <div key={i} className='listOne w-100 w-100-ns pl3-ns bb b--black-10'>
+                <div key={i} className='pv2'>
                     <a href={news.url}>
-                        <p className='f5 fw1 baskerville mt0 lh-title'>{news.title}</p>
+                        <p className='fw7 underline-hover'>{news.title}</p>
                     </a>
-                    <div className='f6 lh-copy mv0'>
+                    <div className='db black-60'>
                         <small>{news.source.name}</small> 
                         {'  |  '}
                         <small>{news.publishedAt}</small>

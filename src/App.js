@@ -182,6 +182,11 @@ class App extends Component {
             </div>
           } 
         </Scroll>      
+
+        <footer class="pv4 ph3 ph5-m ph6-l mid-gray">
+          <small class="f6 db tc">Powered by <b class="ttu">News API</b>, All Rights Reserved.</small>
+        </footer>
+
       </div>
     );
   }
